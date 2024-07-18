@@ -1,21 +1,153 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resume Checker</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
+<style>
+  body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background-color: #f4f7f6;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 20px;
+    margin: 80px
+}
+
+form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: #34495e;
+}
+
+input[type="file"],
+input[type="text"],
+input[type="number"],
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccd0d5;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input[type="submit"] {
+    background-color: #3498db;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+input[type="submit"]:hover {
+    background-color: #2980b9;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 20px;
+}
+
+ul li {
+    background-color: #ecf0f1;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    color: #e74c3c;
+}
+
+h3 {
+    text-align: center;
+    color: #2c3e50;
+    margin: 20px 0;
+}
+
+/* Highlighted sections */
+.required-field {
+    border: 2px solid #e74c3c;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    background-color: #f9ebea;
+}
+
+.highlight {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+@media (max-width: 600px) {
+    form {
+        padding: 15px;
+    }
+
+    input[type="submit"] {
+        width: 100%;
+        padding: 12px;
+    }
+
+    label,
+    input[type="file"],
+    input[type="text"],
+    input[type="number"],
+    textarea {
+        margin-bottom: 15px;
+    }
+}
+
+</style>
 <body>
-    <div class="container">
-        <h1>Resume Checker</h1>
-        <form action="/upload" method="post" enctype="multipart/form-data">
-            <label for="resumes">Upload Resumes (PDF):</label>
-            <input type="file" name="resumes" id="resumes" multiple accept="application/pdf">
+    <h1>Upload Resumes</h1>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+    <form action="{{ url_for('upload_resume') }}" method="post" enctype="multipart/form-data">
+        <label for="resumes">Upload Resumes in PDF:</label>
+        <input type="file" name="resumes" id="resumes" multiple required><br>
+        <div class="required-field">
             <label for="job_description">Job Description:</label>
-            <textarea name="job_description" id="job_description" rows="5"></textarea>
-            <button type="submit">Analyze Resumes</button>
-        </form>
-    </div>
+            <textarea name="job_description" id="job_description"></textarea><br>
+            <label for="top_k">Number of Top Keywords from Job Description:</label>
+            <input type="number" name="top_k" id="top_k"><br>
+            <h3>Or</h3>
+            <label for="keywords">Keywords (comma-separated):</label>
+            <input type="text" name="keywords" id="keywords"><br>
+        </div>
+        <div class="required-field">
+            <label for="top_n">Number of Top Matched Resumes <span class="highlight">(required)</span>:</label>
+            <input type="number" name="top_n" id="top_n" min="1" required><br>
+        </div>
+        <input type="submit" value="Upload">
+    </form>
 </body>
 </html>

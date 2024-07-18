@@ -4,16 +4,123 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resume Checker Results</title>
-    <link rel="stylesheet" href="/static/style.css">
 </head>
+<style>
+    body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background-color: #f4f7f6;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 80%;
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+h1 {
+    text-align: center;
+    color: #2c3e50;
+}
+
+.resume-result {
+    margin-bottom: 40px;
+    padding: 20px;
+    border: 1px solid #e1e8ed;
+    border-radius: 8px;
+    transition: box-shadow 0.3s;
+}
+
+.resume-result:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.resume-result h2 {
+    color: #34495e;
+    margin-bottom: 10px;
+}
+
+.resume-result a {
+    display: inline-block;
+    margin-bottom: 10px;
+    text-decoration: none;
+    color: #3498db;
+    border: 1px solid #3498db;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.resume-result a:hover {
+    background-color: #3498db;
+    color: #fff;
+}
+
+p {
+    margin: 0;
+}
+
+strong {
+    color: #2c3e50;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+ul li {
+    background-color: #ecf0f1;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+ul li strong {
+    display: block;
+    margin-bottom: 5px;
+}
+
+a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+a[href="/"] {
+    display: block;
+    text-align: center;
+    margin: 20px 0;
+    font-size: 16px;
+    color: #3498db;
+    text-decoration: none;
+}
+
+a[href="/"]:hover {
+    text-decoration: underline;
+}
+
+</style>
 <body>
     <div class="container">
         <h1>Resume Checker Results</h1>
         {% for result in results %}
         <div class="resume-result">
             <h2>{{ result.filename }}</h2>
-            <h3>Summary:</h3>
-            <p>{{ result.summary }}</p>
+            <a href="{{ url_for('download_file', filename=result.filename) }}">Download {{ result.filename }}</a>
+            <p><strong>Summary:</strong></p>
+            <div style="white-space: pre-line;">{{ result.summary|safe }}</div>
+            <p><strong>Highlights:</strong></p>
+            <div style="white-space: pre-line;">{{ result.highlights|safe }}</div>
             <h3>Feedback:</h3>
             <ul>
                 {% for item in result.feedback %}
