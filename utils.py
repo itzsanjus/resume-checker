@@ -7,6 +7,7 @@ from sentence_transformers import SentenceTransformer
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 import torch
+device = "cuda" if torch.cuda.is_available() else "cpu"
 import language_tool_python
 from transformers import AutoTokenizer, AutoModelForCausalLM
 from transformers.utils import is_flash_attn_2_available
